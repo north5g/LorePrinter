@@ -16,7 +16,6 @@ def download_images_from_api(api_url, download_folder):
         cards = response.json()
 
         print(f"Found {len(cards)} cards. Downloading images...")
-        counter = 0
         for card in cards:
             # Extract the image URL
             image_url = card.get("Image")
@@ -36,9 +35,6 @@ def download_images_from_api(api_url, download_folder):
                 with open(file_path, "wb") as f:
                     for chunk in image_response.iter_content(chunk_size=8192):
                         f.write(chunk)
-                counter += 1
-                if counter > 500:
-                    break
 
                 print(f"Downloaded: {file_name}")
             except Exception as e:
