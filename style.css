@@ -1,0 +1,51 @@
+#results {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  #results img {
+    max-width: 100px;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  #results img:hover {
+    transform: scale(1.1);
+  }
+  
+  #selectedCards {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  #selectedCards img {
+    max-width: 80px;
+    margin: 5px;
+    border: 2px solid #6200ea;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  #selectedCards img:hover {
+    transform: scale(1.1);
+  }
+  
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+  
