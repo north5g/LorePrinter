@@ -1,5 +1,7 @@
 // Replace with Lorcana API endpoint for the full collection
 const API_URL = 'https://api.lorcana-api.com/bulk/cards';
+const localImages = './images/'; // Local image folder
+const { PDFDocument } = PDFLib;
 
 const searchBox = document.getElementById('searchBox');
 const searchButton = document.getElementById('searchButton');
@@ -11,7 +13,7 @@ selectedCardsDiv.id = 'selectedCards';
 document.getElementById('app').appendChild(selectedCardsDiv);
 
 let allCards = []; // Store all cards from the API
-let selectedCards = []; // Store selected cards
+let selectedCards = []; // Store selected cards (can include duplicates)
 
 // Fetch all cards from the Lorcana API on page load
 async function fetchAllCards() {
@@ -20,10 +22,10 @@ async function fetchAllCards() {
     if (!response.ok) throw new Error('Failed to fetch cards');
     const data = await response.json();
 
-    // Extract only the name and image fields
+    // Extract only the name and image fields, modifying image URL for local storage
     allCards = data.map(card => ({
       Name: card.Name,
-      Image: card.Image
+      Image: localImages + card.Image.split('/').pop() // Use the last part of the URL as the image file name
     }));
 
     displayResults(allCards); // Display the filtered cards
@@ -52,7 +54,7 @@ function displayResults(cards) {
 
   cards.forEach(card => {
     const img = document.createElement('img');
-    img.src = card.Image; // Assuming the API provides an `image` field
+    img.src = card.Image; // Use the local image path
     img.alt = card.Name;
     img.title = card.Name;
     img.style.cursor = 'pointer';
@@ -64,7 +66,7 @@ function displayResults(cards) {
 
 // Add card to the selected list and update display
 function toggleCardSelection(card) {
-  selectedCards.push(card);
+  selectedCards.push(card); // Allow duplicates
   generatePdfButton.disabled = selectedCards.length === 0;
   displaySelectedCards();
 }
@@ -78,37 +80,87 @@ function displaySelectedCards() {
     return;
   }
 
-  selectedCards.forEach((card, index) => {
-    const img = document.createElement('img');
-    img.src = card.Image;
-    img.alt = card.Name;
-    img.title = card.Name;
-    img.style.cursor = 'pointer';
-
-    img.onclick = () => {
-      selectedCards.splice(index, 1);
-      generatePdfButton.disabled = selectedCards.length === 0;
-      displaySelectedCards();
-    };
-
-    selectedCardsDiv.appendChild(img);
-  });
+  // Display all selected cards (including duplicates)
+  selectedCardsDiv.innerHTML += selectedCards
+    .map((card, index) => `
+      <div class="selected-card" style="display: inline-block; margin: 10px; text-align: center;">
+        <img 
+          src="${card.Image}" 
+          alt="${card.Name}" 
+          title="${card.Name}" 
+          style="cursor: pointer; width: 100px; height: auto;"
+          onclick="removeCard(${index})"
+        />
+      </div>
+    `)
+    .join('');
 }
 
-// Generate PDF from selected cards
-function generatePdf() {
-  const pdf = new jsPDF();
+// Remove a card by index (removes the specific instance of the card)
+function removeCard(index) {
+  selectedCards.splice(index, 1); // Remove the card at the given index
+  generatePdfButton.disabled = selectedCards.length === 0;
+  displaySelectedCards();
+}
 
-  selectedCards.forEach((card, index) => {
-    if (index % 9 === 0) pdf.addPage();
-    pdf.addImage(card.Image, 'JPEG', 10, 20, 90, 120)
+async function generatePdf() {
+  if (selectedCards.length === 0) return;
+  // Create a new PDF document
+  const pdfDoc = await PDFDocument.create();
+  let page = pdfDoc.addPage(); // Start with the first page
+  let index = 0;
+  // Define constants for image positioning (3x3 grid per page)
+  const imagesPerPage = 9; // 3x3 grid (3 images per row, 3 rows per page)
+  const imagesPerRow = 3;  // Number of images per row
+  const imageWidth = 63;   // Fixed image width
+  const imageHeight = 88;  // Fixed image height
+  const xOffset = 13.45;   // No horizontal spacing
+  const yOffset = 7.7;     // No vertical spacing
+  const mmToPt = 2.83465;
+  let currentColumn = 0;
+  for (const card of selectedCards) {
+    try {
+      // Fetch the image from the local path
+      const localImagePath = card.Image;
+      const response = await fetch(localImagePath);
+      const imageBytes = await response.arrayBuffer();
+      // Embed the image into the PDF
+      const pngImage = await pdfDoc.embedPng(imageBytes);
+      // Calculate the position for this image
+      const xPos = xOffset + (index % imagesPerRow) * imageWidth; // Position horizontally
+      const yPos = yOffset + currentColumn * imageHeight; // Position vertically
+      // Draw the image on the current page
+      page.drawImage(pngImage, {
+        x: xPos * mmToPt,
+        y: yPos * mmToPt,
+        width: imageWidth * mmToPt,
+        height: imageHeight * mmToPt,
+      });
+      // Check if we need to add a new page (after every 9 images)
+      if ((index + 1) % 3 === 0) {
+        currentColumn += 1;
+      }
+      if ((index + 1) % imagesPerPage === 0) {
+        page = pdfDoc.addPage(); // Add a new page
+        currentColumn = 0;
+      }
+      index += 1;
+      
+    } catch (err) {
+      console.error(`Failed to add image for card: ${card.Name}`, err);
+    }
+  }
 
-  });
-
-  pdf.save('lorcana-proxies.pdf');
+  // Serialize the PDF and trigger a download
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'cards.pdf';
+  link.click();
 }
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', fetchAllCards); // Fetch cards on load
 searchBox.addEventListener('input', () => filterResults(searchBox.value));
-generatePdfButton.onclick = generatePdf;
+generatePdfButton.addEventListener('click', generatePdf); // Attach correct function
