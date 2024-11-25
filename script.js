@@ -8,9 +8,7 @@ const searchButton = document.getElementById('searchButton');
 const resultsDiv = document.getElementById('results');
 const generatePdfButton = document.getElementById('generatePdf');
 
-const selectedCardsDiv = document.createElement('div');
-selectedCardsDiv.id = 'selectedCards';
-document.getElementById('app').appendChild(selectedCardsDiv);
+const selectedCardsDiv = document.getElementById('selectedCards');
 
 let allCards = []; // Store all cards from the API
 let selectedCards = []; // Store selected cards (can include duplicates)
@@ -73,15 +71,14 @@ function toggleCardSelection(card) {
 
 // Display selected cards dynamically
 function displaySelectedCards() {
-  selectedCardsDiv.innerHTML = '<h2>Selected Cards</h2>';
 
   if (selectedCards.length === 0) {
-    selectedCardsDiv.innerHTML += '<p>No cards selected.</p>';
+    selectedCardsDiv.innerHTML = '<p>No cards selected.</p>';
     return;
   }
 
   // Display all selected cards (including duplicates)
-  selectedCardsDiv.innerHTML += selectedCards
+  selectedCardsDiv.innerHTML = selectedCards
     .map((card, index) => `
       <div class="selected-card" style="display: inline-block; margin: 10px; text-align: center;">
         <img 
@@ -103,6 +100,16 @@ function removeCard(index) {
   displaySelectedCards();
 }
 
+// DOM Elements
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+
+// Toggle the sidebar on button click
+sidebarToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('active');
+});
+
+// Generate PDF 
 async function generatePdf() {
   if (selectedCards.length === 0) return;
   // Create a new PDF document
@@ -154,10 +161,8 @@ async function generatePdf() {
   // Serialize the PDF and trigger a download
   const pdfBytes = await pdfDoc.save();
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'cards.pdf';
-  link.click();
+  const blobUrl = URL.createObjectURL(blob);
+  window.open(blobUrl, '_blank');
 }
 
 // Event Listeners
