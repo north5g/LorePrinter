@@ -27,6 +27,11 @@ def download_images_from_api(api_url, download_folder):
             file_name = image_url.split("/")[-1]
             file_path = os.path.join(download_folder, file_name)
 
+            # Check if the file already exists
+            if os.path.exists(file_path):
+                print(f"File already exists, skipping: {file_name}")
+                continue
+
             # Download and save the image
             try:
                 image_response = requests.get(image_url, stream=True)
@@ -39,7 +44,6 @@ def download_images_from_api(api_url, download_folder):
                 print(f"Downloaded: {file_name}")
             except Exception as e:
                 print(f"Failed to download {image_url}: {e}")
-                
 
         print("Image download complete.")
     except Exception as e:
