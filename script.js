@@ -7,6 +7,7 @@ const searchBox = document.getElementById('searchBox');
 const searchButton = document.getElementById('searchButton');
 const resultsDiv = document.getElementById('results');
 const generatePdfButton = document.getElementById('generatePdf');
+const loadingText = document.getElementById('loadingText');
 
 const selectedCardsDiv = document.getElementById('selectedCards');
 const selectedWordsDiv = document.getElementById('selectedWords');
@@ -115,6 +116,11 @@ sidebarToggle.addEventListener('click', () => {
 // Generate PDF 
 async function generatePdf() {
   if (selectedCards.length === 0) return;
+
+  
+  generatePdfButton.classList.add("loading");
+  loadingText.innerHTML = "Loading <span class='dot'>.</span><span class='dot'>.</span><span class='dot'>.</span>";
+
   // Create a new PDF document
   const pdfDoc = await PDFDocument.create();
   let page = pdfDoc.addPage(); // Start with the first page
@@ -166,7 +172,10 @@ async function generatePdf() {
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   const blobUrl = URL.createObjectURL(blob);
   window.open(blobUrl, '_blank');
-}
+
+  loadingText.textContent = "Generate PDF";
+  generatePdfButton.classList.remove("loading");
+} 
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', fetchAllCards); // Fetch cards on load

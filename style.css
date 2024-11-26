@@ -30,6 +30,7 @@
   display: flex;
   flex-direction: column;
   justify-content: top;
+  overflow-y: auto ;
 }
 
 #topRow {
@@ -53,6 +54,39 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: large;
+}
+
+#loadingText {
+  display: inline-block;
+  position: relative;
+}
+
+.dot {
+  display: inline-block;
+  animation: bounce 1s infinite ease-in-out;
+}
+
+/* Keyframes for the bounce animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Delay each dot's animation to create the sequential bounce effect */
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;  /* 0.2s delay for the second dot */
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;  /* 0.4s delay for the third dot */
 }
   
 #generatePdf:disabled {
