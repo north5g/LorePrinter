@@ -66,6 +66,7 @@
   gap: 0 5px;
   padding-top: 15px;
 }
+
 #selectedWords p {
   justify-content: center;
   font-size: larger;
@@ -74,6 +75,8 @@
 #selectedCards img {
   border: 8px solid #6589ee;
   border-radius: 10px;
+  width: 129px;
+  height: 180px;
 }
   
 .sidebar {
@@ -128,13 +131,47 @@ html {
 }
 
 /* Sideways phone screen */
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 650px) {
+  #results {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
+  #selectedCards {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* Computer monitor */
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 775px) {
+  #results {
+    grid-template-columns: repeat(4, 1fr);
+  }
 
+  #selectedCards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Computer monitor */
+@media screen and (min-width: 925px) {
+  #results {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  #selectedCards {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Computer monitor */
+@media screen and (min-width: 1150px) {
+  #results {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  #selectedCards {
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
