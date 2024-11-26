@@ -9,6 +9,7 @@ const resultsDiv = document.getElementById('results');
 const generatePdfButton = document.getElementById('generatePdf');
 
 const selectedCardsDiv = document.getElementById('selectedCards');
+const selectedWordsDiv = document.getElementById('selectedWords');
 
 let allCards = []; // Store all cards from the API
 let selectedCards = []; // Store selected cards (can include duplicates)
@@ -55,7 +56,7 @@ function displayResults(cards) {
     img.src = card.Image; // Use the local image path
     img.alt = card.Name;
     img.title = card.Name;
-    img.style.cursor = 'pointer';
+    img.id = "card-img";
 
     img.onclick = () => toggleCardSelection(card);
     resultsDiv.appendChild(img);
@@ -73,22 +74,23 @@ function toggleCardSelection(card) {
 function displaySelectedCards() {
 
   if (selectedCards.length === 0) {
-    selectedCardsDiv.innerHTML = '<p>No cards selected.</p>';
+    selectedCardsDiv.innerHTML = ''
+    selectedWordsDiv.innerHTML = '<p>No cards selected.</p>';
     return;
   }
+  
 
+  selectedWordsDiv.innerHTML = ''
   // Display all selected cards (including duplicates)
   selectedCardsDiv.innerHTML = selectedCards
     .map((card, index) => `
-      <div class="selected-card" style="display: inline-block; margin: 10px; text-align: center;">
-        <img 
-          src="${card.Image}" 
-          alt="${card.Name}" 
-          title="${card.Name}" 
-          style="cursor: pointer; width: 100px; height: auto;"
-          onclick="removeCard(${index})"
-        />
-      </div>
+      <img 
+        src="${card.Image}" 
+        alt="${card.Name}" 
+        title="${card.Name}" 
+        id="card-img" 
+        onclick="removeCard(${index})"
+      />
     `)
     .join('');
 }
@@ -107,6 +109,7 @@ const sidebarToggle = document.getElementById('sidebarToggle');
 // Toggle the sidebar on button click
 sidebarToggle.addEventListener('click', () => {
   sidebar.classList.toggle('active');
+  sidebarToggle.classList.toggle('active');
 });
 
 // Generate PDF 
