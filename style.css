@@ -1,3 +1,14 @@
+:root {
+  --bg-color: #FFB703;
+  --text-color: #24180f;
+  --card-border: #f8d478;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
 #searchBox {
   position: sticky;
   justify-content: center;
@@ -48,8 +59,8 @@
   flex-grow: 0.5;
   margin-top: 10px;
   padding: 10px 20px;
-  background-color: #6200ea;
-  color: white;
+  background-color: #f04400;
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -90,7 +101,7 @@
 }
   
 #generatePdf:disabled {
-  background-color: #aaa;
+  background-color: var(--card-border);
   cursor: not-allowed;
 }
 
@@ -102,12 +113,13 @@
 }
 
 #selectedWords p {
-  justify-content: center;
-  font-size: larger;
+  align-items: center;
+  font-size: xx-large;
+  padding-inline: 20vw;
 }
   
 #selectedCards img {
-  border: 8px solid #6589ee;
+  border: 8px solid var(--card-border);
   border-radius: 10px;
   width: 129px;
   height: 180px;
@@ -120,7 +132,7 @@
   width: 86vw;
   height: 100%;
   z-index: 200;
-  background-color: #f4f4f4;
+  background-color: var(--bg-color);
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
   transition: transform 1s ease;
 }
@@ -133,13 +145,13 @@
 #sidebarToggle {
   position: fixed;
   top: 0;
-  right: 1%; /* Initial position */
+  right: 0%; /* Initial position */
   z-index: 1000;
   width: 75px; /* Make width and height equal for a circle */
   height: 75px;
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
   border-radius: 50% 0 0 50%;
   cursor: pointer;
   transition: transform 1s ease;
@@ -153,7 +165,7 @@
 }
   
 #sidebarToggle:hover {
-  background-color: #0056b3;
+  background-color: #9c5809;
 }
 
 html {
@@ -161,7 +173,19 @@ html {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #023047;
+    --text-color: #c0deec;
+    --card-border: #076899;
+  }
 
+  #sidebarToggle:hover {
+    background-color: #207dac;
+  }
+
+  #generatePdf {
+    background-color: #118a66;
+  }
 }
 
 /* Sideways phone screen */
@@ -184,6 +208,10 @@ html {
   #selectedCards {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  #topRow h2 {
+    font-size: xx-large;
+  }
 }
 
 /* Computer monitor */
@@ -194,6 +222,10 @@ html {
 
   #selectedCards {
     grid-template-columns: repeat(5, 1fr);
+  }
+
+  #topRow h2 {
+    font-size: xxx-large;
   }
 }
 
@@ -216,5 +248,25 @@ html {
 
   #card-img:hover {
     transform: none;
+  }
+
+  .dot {
+    animation: none;
+  }
+
+  .sidebar {
+    transition: none;
+  }
+
+  .sidebar.active {
+    transition: none;
+  }
+
+  #sidebarToggle {
+    transition: none;
+  }
+
+  #sidebarToggle.active {
+    transition: none;
   }
 }

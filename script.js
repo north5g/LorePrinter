@@ -76,7 +76,7 @@ function displaySelectedCards() {
 
   if (selectedCards.length === 0) {
     selectedCardsDiv.innerHTML = ''
-    selectedWordsDiv.innerHTML = '<p>No cards selected.</p>';
+    selectedWordsDiv.innerHTML = '<p>No cards selected</p>';
     return;
   }
   
