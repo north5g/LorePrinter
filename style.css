@@ -1,7 +1,8 @@
 :root {
-  --bg-color: #FFB703;
+  --bg-color: #ffd978;
   --text-color: #24180f;
   --card-border: #f8d478;
+  --sidebar: #eeb600;
 }
 
 body {
@@ -41,7 +42,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: top;
-  overflow-y: auto ;
+  overflow-y: auto;
 }
 
 #topRow {
@@ -132,7 +133,7 @@ body {
   width: 86vw;
   height: 100%;
   z-index: 200;
-  background-color: var(--bg-color);
+  background-color: var(--sidebar);
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
   transition: transform 1s ease;
 }
@@ -176,7 +177,8 @@ html {
   :root {
     --bg-color: #023047;
     --text-color: #c0deec;
-    --card-border: #076899;
+    --card-border: #024b70;
+    --sidebar: #0572a8;
   }
 
   #sidebarToggle:hover {
