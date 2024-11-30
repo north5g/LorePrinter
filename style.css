@@ -37,6 +37,10 @@ body {
 #card-img:focus {
   transform: scale(1.1);
 }
+
+#card-img:hover {
+  transform: scale(1.1);
+}
   
 #sidebar {
   display: flex;
@@ -169,6 +173,10 @@ body {
   background-color: #9c5809;
 }
 
+#sidebarToggle:hover {
+  background-color: #9c5809;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -252,6 +260,10 @@ html {
     transform: none;
   }
 
+  #card-img:hover {
+    transform: none;
+  }
+
   .dot {
     animation: none;
   }
@@ -265,6 +277,10 @@ html {
   }
   
   #sidebarToggle:focus {
+    transition: none;
+  }
+
+  #sidebarToggle:hover {
     transition: none;
   }
 
