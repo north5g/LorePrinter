@@ -63,6 +63,7 @@ function displayResults(cards) {
     img.title = card.Name;
     img.id = "card-img";
     img.tabIndex = 0;
+    img.onclick = () => toggleCardSelection(card);
     img.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault(); // Prevent page scrolling on Space
