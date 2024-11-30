@@ -12,6 +12,10 @@ const loadingText = document.getElementById('loadingText');
 const selectedCardsDiv = document.getElementById('selectedCards');
 const selectedWordsDiv = document.getElementById('selectedWords');
 
+// DOM Elements
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+
 let allCards = []; // Store all cards from the API
 let selectedCards = []; // Store selected cards (can include duplicates)
 
@@ -58,8 +62,13 @@ function displayResults(cards) {
     img.alt = card.Name;
     img.title = card.Name;
     img.id = "card-img";
-
-    img.onclick = () => toggleCardSelection(card);
+    img.tabIndex = 0;
+    img.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault(); // Prevent page scrolling on Space
+        toggleCardSelection(card);
+      }
+    });
     resultsDiv.appendChild(img);
   });
 }
@@ -90,7 +99,9 @@ function displaySelectedCards() {
         alt="${card.Name}" 
         title="${card.Name}" 
         id="card-img" 
+        tabIndex = "0" 
         onclick="removeCard(${index})"
+        onkeydown="if(event.key === 'Enter') removeCard(${index})"
       />
     `)
     .join('');
@@ -103,9 +114,7 @@ function removeCard(index) {
   displaySelectedCards();
 }
 
-// DOM Elements
-const sidebar = document.getElementById('sidebar');
-const sidebarToggle = document.getElementById('sidebarToggle');
+
 
 // Toggle the sidebar on button click
 sidebarToggle.addEventListener('click', () => {

@@ -34,7 +34,7 @@ body {
   transition: transform 0.2s;
 }
   
-#card-img:hover {
+#card-img:focus {
   transform: scale(1.1);
 }
   
@@ -165,7 +165,7 @@ body {
   transition: transform 1s ease;
 }
   
-#sidebarToggle:hover {
+#sidebarToggle:focus {
   background-color: #9c5809;
 }
 
@@ -181,7 +181,7 @@ html {
     --sidebar: #0572a8;
   }
 
-  #sidebarToggle:hover {
+  #sidebarToggle:focus {
     background-color: #207dac;
   }
 
@@ -248,7 +248,7 @@ html {
     transition: none !important;
   }
 
-  #card-img:hover {
+  #card-img:focus {
     transform: none;
   }
 
@@ -261,6 +261,10 @@ html {
   }
 
   .sidebar.active {
+    transition: none;
+  }
+  
+  #sidebarToggle:focus {
     transition: none;
   }
 
